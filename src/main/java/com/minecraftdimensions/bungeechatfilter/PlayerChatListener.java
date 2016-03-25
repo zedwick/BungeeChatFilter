@@ -18,7 +18,16 @@ public class PlayerChatListener implements Listener {
                 if ( !Main.COMMANDS && isChatCommand( e.getMessage() ) ) {
                     return;
                 }
-                if(Main.NOREPEAT){
+                if ( Main.NOSPAM && !player.hasPermission( "bungeefilter.bypass.spam" ) ) {
+                    if ( spamCheck( player, e.getMessage(), System.currentTimeMillis()) ) {
+                        e.setCancelled( true );
+                        player.sendMessage( new TextComponent( ChatColor.RED + "Please do not spam" ) );
+                        return;
+                    } else {
+                        Main.ANTISPAM.put( player.getName(),System.currentTimeMillis());
+                    }
+                }
+                if(Main.NOREPEAT && !player.hasPermission( "bungeefilter.bypass.repeat" )){
                     if(repeatCheck(player.getName(), e.getMessage())){
                         e.setCancelled( true );
                         player.sendMessage( new TextComponent( ChatColor.RED + "Please do not spam" ) );
@@ -27,15 +36,6 @@ public class PlayerChatListener implements Listener {
                         Main.ANTIREPEAT.put( player.getName(), e.getMessage() );
                     }
 
-                }
-                if ( Main.NOSPAM ) {
-                    if ( spamCheck( player, e.getMessage(), System.currentTimeMillis()) ) {
-                        e.setCancelled( true );
-                        player.sendMessage( new TextComponent( ChatColor.RED + "Please do not spam" ) );
-                        return;
-                    } else {
-                        Main.ANTISPAM.put( player.getName(),System.currentTimeMillis());
-                    }
                 }
                 for ( Rule r : Main.RULES ) {
                     if(r.hasPermission()){
