@@ -67,17 +67,29 @@ public class Rule {
             } else if ( action.equals( "kick" ) ) {
                 player.disconnect( new TextComponent( TextComponent.fromLegacyText( Main.color( actions.get( action )[0] ) ) ) );
             } else if ( action.equals( "alert" ) ) {
-                String alert =   actions.get( action )[0].replace( "{player}", player.getDisplayName() );
+                String alert =   actions.get( action )[0];
+				alert=alert.replace( "{player}", player.getDisplayName() ).replace( "{message}", message );
                 if(message.split( " ", 2 ).length>1){
                        alert =alert.replace("{arguments}", message.split( " ", 2 )[1] )    ;
                 }
                 ProxyServer.getInstance().broadcast(new TextComponent(  Main.color( alert )));
             } else if ( action.equals( "scommand" ) ) {
-                player.chat( actions.get( action )[0] );
+				string action=actions.get( action )[0];
+				action=action.replace( "{player}", player.getName() ).replace( "{message}", message );
+				
+				
+                player.chat( action );
             } else if ( action.equals( "pcommand" ) ) {
-                ProxyServer.getInstance().getPluginManager().dispatchCommand( player, actions.get( action )[0] );
+				string action=actions.get( action )[0];
+				action=action.replace( "{player}", player.getName() ).replace( "{message}", message );
+				
+                ProxyServer.getInstance().getPluginManager().dispatchCommand( player, action );
+				
             } else if( action.equals( "ccommand" )){
-                ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), actions.get( action )[0].replace( "{player}", player.getName() ).replace( "{message}", message ) );
+				string action=actions.get( action )[0];
+				action=action.replace("{player}", player.getName()).replace( "{message}", message );
+				
+                ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), action );
             } else if ( action.equals( "remove" ) ) {
                 message = message.replaceAll( regex.pattern(), "" );
             } else if ( action.equals( "replace" ) ) {
