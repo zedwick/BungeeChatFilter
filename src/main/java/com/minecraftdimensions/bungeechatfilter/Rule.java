@@ -74,22 +74,22 @@ public class Rule {
                 }
                 ProxyServer.getInstance().broadcast(new TextComponent(  Main.color( alert )));
             } else if ( action.equals( "scommand" ) ) {
-				string action=actions.get( action )[0];
-				action=action.replace( "{player}", player.getName() ).replace( "{message}", message );
+				String rp=actions.get( action )[0];
+				rp=rp.replace( "{player}", player.getName() ).replace( "{message}", message );
 				
 				
-                player.chat( action );
+                player.chat( rp );
             } else if ( action.equals( "pcommand" ) ) {
-				string action=actions.get( action )[0];
-				action=action.replace( "{player}", player.getName() ).replace( "{message}", message );
+				String rp=actions.get( action )[0];
+				rp=rp.replace( "{player}", player.getName() ).replace( "{message}", message );
 				
-                ProxyServer.getInstance().getPluginManager().dispatchCommand( player, action );
+                ProxyServer.getInstance().getPluginManager().dispatchCommand( player, rp );
 				
             } else if( action.equals( "ccommand" )){
-				string action=actions.get( action )[0];
-				action=action.replace("{player}", player.getName()).replace( "{message}", message );
+				String rp=actions.get( action )[0];
+				rp=rp.replace("{player}", player.getName()).replace( "{message}", message );
 				
-                ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), action );
+                ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), rp );
             } else if ( action.equals( "remove" ) ) {
                 message = message.replaceAll( regex.pattern(), "" );
             } else if ( action.equals( "replace" ) ) {
