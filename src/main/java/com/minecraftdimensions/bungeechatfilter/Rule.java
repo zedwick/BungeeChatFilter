@@ -63,9 +63,17 @@ public class Rule {
             if ( action.equals( "deny" ) ) {
                 event.setCancelled( true );
             } else if ( action.equals( "message" ) ) {
-                player.sendMessage( TextComponent.fromLegacyText( Main.color( actions.get( action )[0] ) ) );
+            	String rp=actions.get( action )[0];
+				rp=rp.replace( "{player}", player.getName() ).replace( "{message}", message );
+				
+				
+                player.sendMessage( TextComponent.fromLegacyText( Main.color( rp ) ) );
             } else if ( action.equals( "kick" ) ) {
-                player.disconnect( new TextComponent( TextComponent.fromLegacyText( Main.color( actions.get( action )[0] ) ) ) );
+            	String rp=actions.get( action )[0];
+				rp=rp.replace( "{player}", player.getName() ).replace( "{message}", message );
+				
+				
+                player.disconnect( new TextComponent( TextComponent.fromLegacyText( Main.color( rp ) ) ) );
             } else if ( action.equals( "alert" ) ) {
                 String alert =   actions.get( action )[0];
 				alert=alert.replace( "{player}", player.getDisplayName() ).replace( "{message}", message );

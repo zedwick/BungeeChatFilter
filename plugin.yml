@@ -1,0 +1,5 @@
+name: BungeeChatFilter
+main : com.minecraftdimensions.bungeechatfilter.Main
+version: 1.6.7b-
+author: Bloodsplat, Zedwick
+website: https://www.spigotmc.org/resources/bungeechatfilter.20596/
