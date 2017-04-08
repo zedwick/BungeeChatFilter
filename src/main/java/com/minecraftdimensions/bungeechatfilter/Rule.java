@@ -1,6 +1,5 @@
 package com.minecraftdimensions.bungeechatfilter;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -10,7 +9,6 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Rule {
 
@@ -66,30 +64,30 @@ public class Rule {
             if ( action.equals( "deny" ) ) {
                 event.setCancelled( true );
             } else if ( action.equals( "message" ) ) {
-            	String rp=customParams(actions.get( action )[0], player);
+            	String rp=customParams(actions.get( action )[0], player, event);
                 player.sendMessage( TextComponent.fromLegacyText( Main.color( rp ) ) );
             } else if ( action.equals( "kick" ) ) {
-            	String rp=customParams(actions.get( action )[0], player);
+            	String rp=customParams(actions.get( action )[0], player, event);
 				
                 player.disconnect( new TextComponent( TextComponent.fromLegacyText( Main.color( rp ) ) ) );
             } else if ( action.equals( "alert" ) ) {
                 
-                String rp=customParams(actions.get( action )[0], player);
+                String rp=customParams(actions.get( action )[0], player, event);
                 if(message.split( " ", 2 ).length>1){
                 	rp =rp.replace("{arguments}", message.split( " ", 2 )[1] )    ;
                 }
                 ProxyServer.getInstance().broadcast(new TextComponent(  Main.color( rp )));
             } else if ( action.equals( "scommand" ) ) {
-            	String rp=customParams(actions.get( action )[0], player);
+            	String rp=customParams(actions.get( action )[0], player, event);
             	
                 player.chat( rp );
             } else if ( action.equals( "pcommand" ) ) {
-            	String rp=customParams(actions.get( action )[0], player);
+            	String rp=customParams(actions.get( action )[0], player, event);
 				
                 ProxyServer.getInstance().getPluginManager().dispatchCommand( player, rp );
 				
             } else if( action.equals( "ccommand" )){
-            	String rp=customParams(actions.get( action )[0], player);
+            	String rp=customParams(actions.get( action )[0], player, event);
 				
                 ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), rp );
             } else if ( action.equals( "remove" ) ) {
@@ -134,18 +132,23 @@ public class Rule {
     public String getPermission() {
         return permission;
     }
-    public String findRWord(String message, String regex){
+    public String findRWord(String message, String regex) throws java.lang.IllegalStateException{
     	Pattern pattern = Pattern.compile(regex);
     	Matcher m = pattern.matcher(message);
     	m.find();
     	return m.group(1) ;
     }
-    public String customParams(String message, ProxiedPlayer player){
-    	String match=findRWord(message, getStringRegex());
-    	message=message.replace( "{player}", player.getName() )
-    			.replace( "{message}", message )
+    public String customParams(String configMessage, ProxiedPlayer player, ChatEvent event){
+    	String chatMessage = event.getMessage();
+    	String ret="";
+    	String match="NULL";
+    	try{
+    		match=findRWord(chatMessage, this.regex.pattern());
+    	}catch (Exception e){}
+    	ret=configMessage.replace( "{player}", player.getName() )
+    			.replace( "{message}", chatMessage )
     			.replace( "{match}", match );
     	
-    	return message;
+    	return ret;
     }
 }
