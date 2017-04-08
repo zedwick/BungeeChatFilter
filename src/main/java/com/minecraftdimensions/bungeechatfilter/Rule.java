@@ -54,7 +54,7 @@ public class Rule {
     public void performActions( ChatEvent event, ProxiedPlayer player ) {
         String message = event.getMessage();
         //get message word that matched.
-        String match=findRWord(message, getStringRegex());
+        
         
         if(ignore!=null){
             Matcher ig =Pattern.compile(ignore.pattern()).matcher(message);
@@ -66,39 +66,30 @@ public class Rule {
             if ( action.equals( "deny" ) ) {
                 event.setCancelled( true );
             } else if ( action.equals( "message" ) ) {
-            	String rp=actions.get( action )[0];
-				rp=rp.replace( "{player}", player.getName() ).replace( "{message}", message ).replace( "{match}", match );
-				
-				
+            	String rp=customParams(actions.get( action )[0], player);
                 player.sendMessage( TextComponent.fromLegacyText( Main.color( rp ) ) );
             } else if ( action.equals( "kick" ) ) {
-            	String rp=actions.get( action )[0];
-				rp=rp.replace( "{player}", player.getName() ).replace( "{message}", message ).replace( "{match}", match );
-				
+            	String rp=customParams(actions.get( action )[0], player);
 				
                 player.disconnect( new TextComponent( TextComponent.fromLegacyText( Main.color( rp ) ) ) );
             } else if ( action.equals( "alert" ) ) {
-                String alert =   actions.get( action )[0];
-				alert=alert.replace( "{player}", player.getDisplayName() ).replace( "{message}", message ).replace( "{match}", match );
+                
+                String rp=customParams(actions.get( action )[0], player);
                 if(message.split( " ", 2 ).length>1){
-                       alert =alert.replace("{arguments}", message.split( " ", 2 )[1] )    ;
+                	rp =rp.replace("{arguments}", message.split( " ", 2 )[1] )    ;
                 }
-                ProxyServer.getInstance().broadcast(new TextComponent(  Main.color( alert )));
+                ProxyServer.getInstance().broadcast(new TextComponent(  Main.color( rp )));
             } else if ( action.equals( "scommand" ) ) {
-				String rp=actions.get( action )[0];
-				rp=rp.replace( "{player}", player.getName() ).replace( "{message}", message ).replace( "{match}", match );
-				
-				
+            	String rp=customParams(actions.get( action )[0], player);
+            	
                 player.chat( rp );
             } else if ( action.equals( "pcommand" ) ) {
-				String rp=actions.get( action )[0];
-				rp=rp.replace( "{player}", player.getName() ).replace( "{message}", message ).replace( "{match}", match );
+            	String rp=customParams(actions.get( action )[0], player);
 				
                 ProxyServer.getInstance().getPluginManager().dispatchCommand( player, rp );
 				
             } else if( action.equals( "ccommand" )){
-				String rp=actions.get( action )[0];
-				rp=rp.replace("{player}", player.getName()).replace( "{message}", message ).replace( "{match}", match );
+            	String rp=customParams(actions.get( action )[0], player);
 				
                 ProxyServer.getInstance().getPluginManager().dispatchCommand( ProxyServer.getInstance().getConsole(), rp );
             } else if ( action.equals( "remove" ) ) {
@@ -148,5 +139,13 @@ public class Rule {
     	Matcher m = pattern.matcher(message);
     	m.find();
     	return m.group(1) ;
+    }
+    public String customParams(String message, ProxiedPlayer player){
+    	String match=findRWord(message, getStringRegex());
+    	message=message.replace( "{player}", player.getName() )
+    			.replace( "{message}", message )
+    			.replace( "{match}", match );
+    	
+    	return message;
     }
 }
