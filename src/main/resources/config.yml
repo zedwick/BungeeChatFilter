@@ -56,7 +56,8 @@ AntiRepeatMessage: &cPlease do not spam
 #          scommand: /(command)    - Server command this will cause the player to send the (command) to their current server. You must include a /.
 #          ccommand: (command)    - Console command, this will cause the proxy server console to execute the (command). Do not include a /.
 #                                      Note that there is currently no way to execute a command as the current server console.
-
+#EX:       ccommand: "ban {player} You said {message}"
+#EX        ccommand: "ban {player} You said this word {match} you will be banned"
 
 rules:
 
