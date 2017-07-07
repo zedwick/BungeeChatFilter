@@ -89,7 +89,7 @@ public class PlayerChatListener implements Listener {
     }
 
     public boolean isMonitoredCommand(String command){
-        return  Main.COMLIST.contains( command.substring( 1, command.length() ).split( " " )[0]);
+        return  Main.COMLIST.contains( command.substring( 1, command.length() ).split( " " )[0].toLowerCase());
     }
 
 }
